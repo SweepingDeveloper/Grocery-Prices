@@ -1,4 +1,5 @@
 <?php
+define ('login', TRUE);
 include 'mysql_login.php';
 ?>
 
