@@ -52,14 +52,23 @@ while ($row = mysqli_fetch_array($result))
 	{
 		$foodflag[$a] = sign($row[$foodnames[$a]] - $food[$a]);
 		if ($food[$a] == 0) 
-			{
-				$foodflag[$a] = 0;
-				$fooddif[$a] = $row[$foodnames[$a]] - $food[$a];
-			}
+		{
+			$foodflag[$a] = 0;
+			$fooddif[$a] = $row[$foodnames[$a]] - $food[$a];
+		}
+		else
+		{
+			$fooddif[$a] = $row[$foodnames[$a]] - $food[$a];
+			$food_perc_calc = ($fooddif[$a] / $food[$a]);	//Step One
+			$food_perc_calc *= 1000;								//Step Two
+			$food_perc_calc = (int) $food_perc_calc;			//Step Three
+			$food_perc_calc /= 1000;								//Step Four (Yeah, I know it needs optimized.  This is just to make sure it works.)
+			$foodperc[$a] = percent(abs($food_perc_calc));
+		}
 		echo "<td ";
-		if ($foodflag[$a] == -1) { echo " style='background: linear-gradient(green, lime); color:black'>".$row[$foodnames[$a]];  }
-		else if ($foodflag[$a] == 0) { echo ">".$row[$foodnames[$a]];  }
-		else if ($foodflag[$a] == 1) { echo " style='background: linear-gradient(maroon, red); color:white'>".$row[$foodnames[$a]];  }
+		if ($foodflag[$a] == -1) { echo " style='background: linear-gradient(green, lime); color:black'>".$row[$foodnames[$a]]."</td><td style='font-size:70%'>-".$foodperc[$a]."";  }
+		else if ($foodflag[$a] == 0) { echo ">".$row[$foodnames[$a]]."</td><td style='color:black; font-size:70%'>....";  }
+		else if ($foodflag[$a] == 1) { echo " style='background: linear-gradient(maroon, red); color:white'>".$row[$foodnames[$a]]."</td><td style='font-size:70%'>+".$foodperc[$a]."";  }
 		echo "</td>";
 		$food[$a] = $row[$foodnames[$a]];
 		
